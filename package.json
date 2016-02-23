@@ -1,0 +1,24 @@
+{
+  "name": "comics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "archiver": "^0.21.0",
+    "jsdom": "^8.0.4",
+    "log": "^1.4.0",
+    "slug": "^0.9.1",
+    "sqlite3": "^3.1.1"
+  },
+  "jshintConfig": {
+    "esversion": 6,
+    "ignore": [
+      "./node_modules"
+    ]
+  }
+}

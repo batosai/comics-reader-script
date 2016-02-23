@@ -1,0 +1,16 @@
+/build/
+/node_modules/
+/app/bower_components/
+/app/css/
+/.sass-cache/
+
+!build/.gitkeep
+!node_modules/.gitkeep
+!app/css/.gitkeep
+
+*~
+
+.DS_Store
+/books/
+debug.log
+comics.sqlite
