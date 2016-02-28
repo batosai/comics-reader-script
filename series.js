@@ -22,13 +22,13 @@ var series = (url) => {
               stmt.run(title, slugTitle, slugTitle, link);
               stmt.finalize();
               // console.log(title, link);
-
-              config.db.each("SELECT rowid AS id FROM series WHERE slug='" + slugTitle + "'", (err, row) => {
-                volumes(slugTitle, link, row.id);
-                console.log(row.id, title, link);
-              });
-
             }
+
+            config.db.each("SELECT rowid AS id, * FROM series WHERE slug='" + slugTitle + "'", (err, row) => {
+              volumes(row);
+              console.log(row.id, title, link);
+            });
+
           });
         };
 
@@ -49,6 +49,7 @@ var series = (url) => {
             }
           }
         }
+
 
       });
     }

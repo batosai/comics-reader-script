@@ -2,7 +2,7 @@ var fs       = require("fs");
 var archiver = require('archiver'); // https: //www.npmjs.com/package/archiver
 var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
 
-module.exports = function() {
+module.exports = function(path) {
   'use strict';
   class Zip {
       constructor(path, name) {
@@ -12,13 +12,15 @@ module.exports = function() {
           this.archive = archiver('zip');
       }
 
-      create() {
+      create(callback) {
         let self = this;
         this.output.on('close', () => {
           console.log(self.archive.pointer() + ' total bytes');
           // console.log('archiver has been finalized and the output file descriptor has closed.');
           log.info(self.archive.pointer() + ' total bytes');
           log.info('Archiver has been finalized and the output file descriptor has closed.');
+
+          callback();
         });
 
         this.archive.on('error', (err) => {
@@ -37,7 +39,7 @@ module.exports = function() {
       }
   }
 
-  return new Zip('books/', __dirname + '/book.cbz');
+  return new Zip(path, path + '.cbz');
 
   // var z = new Zip('books/', __dirname + '/book.cbz');
   // z.create();

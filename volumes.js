@@ -3,21 +3,21 @@ var slug     = require('slug');
 var creatDir = require('./creatDir.js');
 var config   = require('./config.js');
 
-module.exports = (slugTitle, url, id) => {
+module.exports = (serie) => {
   'use strict';
   jsdom.env({
-    url: url,
+    url: serie.link,
     done: (errors, window) => {
       let groups = window.document.querySelectorAll('.group');
 
       config.db.serialize(function() {
         let save = (title, link) => {
-          config.db.each("SELECT count(*) as count FROM volumes WHERE serie_id='" + id + "'", (err, row) => {
+          config.db.each("SELECT count(*) as count FROM volumes WHERE serie_id='" + serie.id + "'", (err, row) => {
             if(!row.count) {
-              creatDir(config.path + '/' + slugTitle + '/' + slug(title));
+              creatDir(config.path + '/' + serie.path + '/' + slug(title));
 
               let stmt = config.db.prepare("INSERT INTO volumes VALUES (?, ?, ?, ?, ?, ?)");
-              stmt.run(id, title, slug(title), slugTitle + '/' + slug(title), link, 0);
+              stmt.run(serie.id, title, slug(title), serie.path + '/' + slug(title), link, 0);
               stmt.finalize();
               // console.log(title, link);
             }

@@ -2,15 +2,16 @@ var http     = require("http");
 var fs       = require("fs");
 var jsdom    = require("jsdom");
 var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
+var Zip      = require('./zip.js');
 var config   = require('./config.js');
 
-module.exports = (url) => {
+module.exports = (book, callback) => {
   'use strict';
   let pages = [];
   let it    = 0;
 
   jsdom.env({
-    url: url,
+    url: book.link,
     done: (errors, window) => {
       let links = window.document.querySelectorAll('.topbar_right ul.dropdown li a');
 
@@ -40,6 +41,20 @@ module.exports = (url) => {
               it++;
               if(it < pages.length){
                 download();
+              }
+              else {
+                // update
+
+                let zip = new Zip(book.path);
+                zip.create(() => {
+                  fs.rmdir(book.path, () => {
+                    config.db.serialize(() => {
+                      config.db.run("UPDATE volumes SET finish=1 WHERE rowid=" + book.id);
+                    });
+                  });
+                });
+
+                callback();
               }
 
             });
