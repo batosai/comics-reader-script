@@ -9,26 +9,28 @@ var series = (url) => {
   jsdom.env({
     url: url,
     done: (errors, window) => {
-      let groups = window.document.querySelectorAll('.group');
+      (function(){
+        let groups = window.document.querySelectorAll('.group');
 
-      config.db.serialize(function() {
-        let save = (title, link) => {
+        let save   = (title, link) => {
           let slugTitle = slug(title);
-          config.db.each("SELECT count(*) as count FROM series WHERE slug='" + slugTitle + "'", (err, row) => {
-            if(!row.count) {
-              creatDir(config.path + '/' + slugTitle);
+          config.db.serialize(function() {
+            config.db.each("SELECT count(*) as count FROM series WHERE slug='" + slugTitle + "'", (err, row) => {
+              if(!row.count) {
+                creatDir(config.path + '/' + slugTitle);
 
-              let stmt = config.db.prepare("INSERT INTO series VALUES (?, ?, ?, ?)");
-              stmt.run(title, slugTitle, slugTitle, link);
-              stmt.finalize();
-              // console.log(title, link);
-            }
+                let stmt = config.db.prepare("INSERT INTO series (title, slug, path, link) VALUES (?, ?, ?, ?)");
+                stmt.run(title, slugTitle, slugTitle, link);
+                stmt.finalize();
+                console.log(title);
+              }
 
-            config.db.each("SELECT rowid AS id, * FROM series WHERE slug='" + slugTitle + "'", (err, row) => {
-              volumes(row);
-              console.log(row.id, title, link);
+              // config.db.each("SELECT rowid AS id, * FROM series WHERE slug='" + slugTitle + "'", (err, row) => {
+              //   volumes(row);
+              //   console.log(row.id, title, link);
+              // });
+
             });
-
           });
         };
 
@@ -49,9 +51,7 @@ var series = (url) => {
             }
           }
         }
-
-
-      });
+      })();
     }
   });
 };

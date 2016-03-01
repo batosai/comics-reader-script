@@ -40,7 +40,4 @@ module.exports = function(path) {
   }
 
   return new Zip(path, path + '.cbz');
-
-  // var z = new Zip('books/', __dirname + '/book.cbz');
-  // z.create();
 };
