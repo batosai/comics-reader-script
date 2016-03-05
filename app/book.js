@@ -32,6 +32,7 @@ module.exports = (book, callback) => {
             }
           });
         } catch (e) {
+          log.error('Get book error: %s', e.message);
           callback();
         }
       })();

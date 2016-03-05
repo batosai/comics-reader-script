@@ -37,6 +37,7 @@ module.exports = (serie, callback) => {
             callback();
           });
         } catch (e) {
+          log.error('Get volume error: %s', e.message);
           callback();
         }
       })();

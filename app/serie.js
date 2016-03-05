@@ -46,6 +46,7 @@ var series = (url) => {
             }
           }
         } catch (e) {
+          log.error('Get serie error: %s', e.message);
         }
       })();
     }

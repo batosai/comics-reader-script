@@ -36,9 +36,11 @@ module.exports = (page, callback) => {
 
           }).on('error', (e) => {
             // console.log(`Got error: ${e.message}`);
-            log.error('Got error: %s', e.message);
+            log.error('Get page error: %s', e.message);
+            callback();
           });
         } catch (e) {
+          log.error('Get page error try: %s', e.message);
           callback();
         }
       })();
