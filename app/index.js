@@ -20,9 +20,11 @@ var visited = [];
 var getVolumes = function(){
   'use strict';
 
-  let where = 'WHERE id > 596';
+  // let where = 'WHERE id > 596';
+  let where = '';
   if(visited.length) {
-    where = 'WHERE id > 596 AND id NOT IN(' + visited.join() + ')';
+    // where = 'WHERE id > 596 AND id NOT IN(' + visited.join() + ')';
+    where = 'WHERE id NOT IN(' + visited.join() + ')';
   }
 
   config.db.serialize(function() {

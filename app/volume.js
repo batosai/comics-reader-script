@@ -14,7 +14,7 @@ module.exports = (serie, callback) => {
 
           config.db.serialize(function() {
             let save = (title, link) => {
-              config.db.each("SELECT count(*) as count FROM volumes WHERE serie_id='" + serie.id + "'", (err, row) => {
+              config.db.each("SELECT count(*) as count FROM volumes WHERE slug='" + slug(title) + "' AND serie_id='" + serie.id + "'", (err, row) => {
                 if(!row.count) {
                   creatDir(config.path + '/' + serie.path + '/' + slug(title));
 

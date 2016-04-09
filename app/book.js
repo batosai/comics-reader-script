@@ -22,7 +22,7 @@ module.exports = (book, callback) => {
 
             for (let index in links) {
               let href = links[index].href;
-              let stmt = config.db.prepare("INSERT INTO pages (volumes_id, name, path, link) VALUES (?, ?, ?, ?)");
+              let stmt = config.db.prepare("INSERT INTO pages (volume_id, name, path, link) VALUES (?, ?, ?, ?)");
               stmt.run(id, 'page' + index + '.jpg', book.path, href);
               stmt.finalize();
 
