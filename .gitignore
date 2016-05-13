@@ -12,5 +12,6 @@
 
 .DS_Store
 /download/
+/ebooks/
 debug.log
 comics.sqlite

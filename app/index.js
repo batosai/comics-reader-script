@@ -4,6 +4,7 @@ var volume  = require('./volume.js');
 var book     = require('./book.js');
 var page     = require('./page.js');
 var creatDir = require('./creatDir.js');
+var Zip      = require('./zip.js');
 var arg      = process.argv.slice(2);
 var fs       = require("fs");
 var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
@@ -87,8 +88,29 @@ if(arg[0] == 'pages') {
 }
 
 if(arg[0] == 'zip') {
-  // if nb pages == column pages in books
+
+  config.db.serialize(() => {
+    'use strict';
+
+    config.db.each("SELECT volumes.*, series.path AS dir FROM volumes INNER JOIN series ON series.id=volumes.serie_id WHERE volumes.finish=0", (err, v) => {
+      config.db.each("SELECT count(*) as count FROM pages WHERE volume_id=" + v.id, (err, row) => {
+        if(row.count == v.pages) {
+          creatDir(config.pathEbook + '/' + v.dir);
+
+          let zip = new Zip(config.path + '/' + v.path + '/', config.pathEbook + '/' + v.dir + '/' + v.slug + '.cbz');
+          zip.create(() => {
+
+              config.db.serialize(() => {
+                config.db.run("UPDATE volumes SET finish=1 WHERE id=" + v.id);
+              });
+
+          });
+        }
+      });
+    });
+  });
+
+  // if nb pages == column pages in volume
   // zip
-  // remove dir
-  // update book finish=1
+  // update volume finish=1
 }

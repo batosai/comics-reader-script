@@ -2,7 +2,7 @@ var fs       = require("fs");
 var archiver = require('archiver'); // https: //www.npmjs.com/package/archiver
 var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
 
-module.exports = function(path) {
+module.exports = function(source, dest) {
   'use strict';
   class Zip {
       constructor(path, name) {
@@ -39,5 +39,5 @@ module.exports = function(path) {
       }
   }
 
-  return new Zip(path, path + '.cbz');
+  return new Zip(source, dest);
 };

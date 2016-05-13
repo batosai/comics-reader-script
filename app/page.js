@@ -2,7 +2,6 @@ var http     = require("http");
 var fs       = require("fs");
 var jsdom    = require("jsdom");
 var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
-var Zip      = require('./zip.js');
 var config   = require('./config.js');
 
 module.exports = (page, callback) => {
@@ -20,14 +19,9 @@ module.exports = (page, callback) => {
             res.pipe(file);
             res.on('end', () => {
 
-              // let zip = new Zip(config.path + '/' + book.path + '/');
-              // zip.create(() => {
-              //   fs.rmdir(config.path + '/' + book.path, () => {
-                  config.db.serialize(() => {
-                    config.db.run("UPDATE pages SET finish=1 WHERE id=" + page.id);
-                  });
-              //   });
-              // });
+            config.db.serialize(() => {
+              config.db.run("UPDATE pages SET finish=1 WHERE id=" + page.id);
+            });
 
               callback();
 
