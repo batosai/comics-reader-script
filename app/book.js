@@ -23,7 +23,16 @@ module.exports = (book, callback) => {
             for (let index in links) {
               let href = links[index].href;
               let stmt = config.db.prepare("INSERT INTO pages (volume_id, name, path, link) VALUES (?, ?, ?, ?)");
-              stmt.run(id, 'page' + index + '.jpg', book.path, href);
+
+              let name = index;
+              if(index < 10) {
+                name = '0' + name;
+              }
+              else if(index < 100) {
+                name = '0' + name;
+              }
+
+              stmt.run(id, 'page' + name + '.jpg', book.path, href);
               stmt.finalize();
 
               if(parseInt(index)+1 == length) {
