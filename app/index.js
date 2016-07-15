@@ -8,6 +8,7 @@ var Zip      = require('./zip.js');
 var arg      = process.argv.slice(2);
 var fs       = require("fs");
 var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
+var cronJob  = require('cron').CronJob;
 
 creatDir(config.path);
 
@@ -85,6 +86,25 @@ if(arg[0] == 'pages') {
   getPages("AND pages.id >= 100000 AND pages.id < 200000");
   getPages("AND pages.id >= 200000 AND pages.id < 300000");
   getPages("AND pages.id >= 300000");
+}
+
+if(arg[0] == 'all') {
+  // s m h d M DayWeek
+  new cronJob('0 0 0 * * 0', function() {
+    serie(config.site);
+  }, null, true);
+
+  new cronJob('0 0 6 * * 0', function() {
+    getVolumes();
+  }, null, true);
+
+  new cronJob('0 0 0 * * 1', function() {
+    getBooks();
+  }, null, true);
+
+  new cronJob('0 0 0 * * 2', function() {
+    getPages("AND pages.id >= 300000");
+  }, null, true);
 }
 
 if(arg[0] == 'zip') {
