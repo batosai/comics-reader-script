@@ -2,6 +2,7 @@ var fs  = require("fs");
 var Log = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
 
 module.exports = function(path){
+  path = path.trim();
   if(!fs.existsSync(path)){
      fs.mkdirSync(path, 0766, (err) => {
        if(err){

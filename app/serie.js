@@ -2,6 +2,8 @@ var jsdom    = require("jsdom");
 var slug     = require('slug');
 var creatDir = require('./creatDir.js');
 var config   = require('./config.js');
+var fs       = require("fs");
+var Log      = require('log'), log = new Log('debug', fs.createWriteStream('debug.log'));
 
 var series = (url) => {
   'use strict';
